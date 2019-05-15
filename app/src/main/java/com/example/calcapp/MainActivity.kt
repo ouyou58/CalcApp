@@ -3,6 +3,7 @@ package com.example.calcapp
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import android.text.InputType
 import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if (v.id == R.id.button1){
+
             count(button1.text.toString())
 
         }else if(v.id == R.id.button2) {
@@ -43,17 +45,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun count(sylbom:String) {
-        val xxx = edit1.text.toString().toDouble()
-        val yyy = edit2.text.toString().toDouble()
-        when(sylbom){
-            "+" -> total = xxx + yyy
-            "-" -> total = xxx-yyy
-            "*" -> total = xxx*yyy
-            "/" -> total = xxx/yyy
+
+        val value1 = edit1.text.toString()
+        val value2 = edit2.text.toString()
+        if (value1.isEmpty() || value2.isEmpty()){
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setTitle("入力ミスです！")
+            alertDialogBuilder.setMessage("数字はどちらかは空です。計算できません！")
+            alertDialogBuilder.setPositiveButton("OK",null)
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+
+        }else {
+            when (sylbom) {
+                "+" -> total = value1.toDouble() + value2.toDouble()
+                "-" -> total = value1.toDouble() - value2.toDouble()
+                "*" -> total = value1.toDouble() * value2.toDouble()
+                "/" -> total = value1.toDouble() / value2.toDouble()
+            }
+            val intent = Intent(this, SecondActivity::class.java)
+            intent.putExtra("Total", total)
+            startActivity(intent)
         }
-        val intent = Intent(this,SecondActivity::class.java)
-        intent.putExtra("Total",total)
-        startActivity(intent)
 
     }
 }
